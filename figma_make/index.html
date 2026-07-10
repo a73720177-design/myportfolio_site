@@ -1,78 +1,72 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>나의 브레인 덤프</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GameBalance - Monster DB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dialogs.css">
+  <link rel="stylesheet" href="tooltip.css">
+  <style>.difficulty-easy{border-color:#1677b8!important;background:linear-gradient(135deg,#063f56 40%,#087e8b)!important;color:#74e8ff!important}.difficulty-normal{border-color:#078b68!important;background:linear-gradient(135deg,#053e31 40%,#087a51)!important;color:#63f2ba!important}.difficulty-hard{border-color:#b87700!important;background:linear-gradient(135deg,#4b3305 40%,#8a5b00)!important;color:#ffe06b!important}</style>
+  <style>.filters{grid-template-columns:minmax(0,1fr) 107px 95px 190px 116px!important;gap:8px!important}.filters #sortOrder{padding:0 10px;color:#9ba5b8}</style>
+  <style>.rank-face{width:18px!important;height:18px!important;stroke-width:1.8!important}.easy-face{color:#4da3ff}.normal-face{color:#2ee680}.hard-face{color:#ff4d5e}.boss-face{color:#ff243f;filter:drop-shadow(0 0 2px #000)}.boss-face .boss-fill{fill:#08090b;stroke:#ff243f}.difficulty-boss{border-color:rgba(255,36,63,.45);background:linear-gradient(135deg,#07080a 45%,rgba(255,36,63,.18));color:#ff5268}</style>
+  <style>.custom-type-field{display:none;grid-column:1/-1}.custom-type-field.visible{display:flex}.trash-page .column-grid{grid-template-columns:293px 150px 150px 87px 87px 87px 180px 121px}.main-actions{display:flex;align-items:center;gap:3px}.main-actions button{border:1px solid transparent;background:transparent;font-family:inherit;cursor:pointer}.row-edit{color:#9ba5b8}.main-actions .row-delete{opacity:1;color:#ff6467}.action-swap,.trash-swap{width:27px;height:27px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid transparent!important;border-radius:4px!important;padding:0!important;transition:width .18s ease,background .18s ease,border-color .18s ease}.action-icon,.trash-action-icon{display:block;font-size:14px;line-height:1}.action-label,.trash-action-label{display:none;font-size:10px;font-weight:700;white-space:nowrap}.action-swap:hover,.action-swap:focus-visible,.trash-swap:hover,.trash-swap:focus-visible{width:42px}.action-swap:hover .action-icon,.action-swap:focus-visible .action-icon,.trash-swap:hover .trash-action-icon,.trash-swap:focus-visible .trash-action-icon{display:none}.action-swap:hover .action-label,.action-swap:focus-visible .action-label,.trash-swap:hover .trash-action-label,.trash-swap:focus-visible .trash-action-label{display:block}.row-edit:hover,.row-edit:focus-visible,.edit-trash:hover,.edit-trash:focus-visible{border-color:rgba(155,165,184,.28)!important;background:rgba(155,165,184,.1)}.main-actions .row-delete:hover,.main-actions .row-delete:focus-visible,.destroy-trash:hover,.destroy-trash:focus-visible{border-color:rgba(255,100,103,.3)!important;background:rgba(255,100,103,.1)}.restore-trash:hover,.restore-trash:focus-visible{border-color:rgba(57,255,126,.3)!important;background:rgba(57,255,126,.09)}.type-tag{box-shadow:0 1px 2px rgba(0,0,0,.35);text-shadow:0 1px 1px rgba(0,0,0,.35)}</style>
 </head>
 <body>
-
-<div class="app">
-  <div class="header">
-    <div class="header-row">
-      <div>
-        <p class="eyebrow">Brain Dump</p>
-        <h1 class="title">나의 브레인 덤프</h1>
-        <p class="subtitle">머릿속 생각을 모두 꺼내 정리해보세요</p>
-      </div>
-      <div class="percent-block">
-        <div class="percent" id="percentValue">0<span class="percent-sign">%</span></div>
-        <div class="percent-label" id="percentLabel">0 / 0 완료</div>
-      </div>
+  <header class="app-header">
+    <div class="shell header-inner" id="mainHeader">
+      <a class="brand" href="#" aria-label="GameBalance"><span class="brand-mark"></span><span class="brand-name">GAMEBALANCE</span><span class="version">&#47788;&#49828;&#53552; DB v2.4</span></a>
+      <div class="header-tools"><span id="entityCount">5&#44060; &#50644;&#54000;&#54000;</span><button class="trash-button" id="myBalanceButton" type="button">&#9733;&nbsp; &#45208;&#51032; Balance</button><button class="trash-button" id="trashButton" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5"/></svg>&#55092;&#51648;&#53685;</button></div>
     </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill"></div>
+    <div class="shell header-inner trash-header" id="trashHeader"><div class="brand"><span class="brand-mark"></span><span class="brand-name">GAMEBALANCE</span><span class="version">&#47788;&#49828;&#53552; DB v2.4</span><span class="crumb">/</span><strong class="trash-title">&#128465; &#55092;&#51648;&#53685;</strong></div><button class="trash-button" id="backToList" type="button">&#8592;&nbsp; &#47785;&#47197;&#51004;&#47196;</button></div>
+  </header>
+
+  <section class="overview" id="mainOverview">
+    <div class="shell overview-grid">
+      <div class="metric"><svg class="rank-face easy-face" viewBox="0 0 24 24"><path d="M5 9 3 5l5 2M19 9l2-4-5 2M5 9c0-3 3-5 7-5s7 2 7 5v6c0 4-3 6-7 6s-7-2-7-6V9Z"/><path d="m8 11 2 1-2 1m8-2-2 1 2 1m-7 4h6"/></svg><div><span>&#49772;&#50880; &#46321;&#44553;</span><strong id="easyMetric">2</strong></div></div>
+      <div class="metric"><svg class="rank-face normal-face" viewBox="0 0 24 24"><path d="M5 9 3 5l5 2M19 9l2-4-5 2M5 9c0-3 3-5 7-5s7 2 7 5v6c0 4-3 6-7 6s-7-2-7-6V9Z"/><path d="m8 11 2 1-2 1m8-2-2 1 2 1m-7 4h6"/></svg><div><span>&#48372;&#53685; &#46321;&#44553;</span><strong id="normalMetric">1</strong></div></div>
+      <div class="metric"><svg class="rank-face hard-face" viewBox="0 0 24 24"><path d="M5 9 3 5l5 2M19 9l2-4-5 2M5 9c0-3 3-5 7-5s7 2 7 5v6c0 4-3 6-7 6s-7-2-7-6V9Z"/><path d="m8 11 2 1-2 1m8-2-2 1 2 1m-7 4h6"/></svg><div><span>&#50612;&#47140;&#50880; &#46321;&#44553;</span><strong id="hardMetric">1</strong></div></div>
+      <div class="metric"><svg class="rank-face boss-face" viewBox="0 0 24 24"><path class="boss-fill" d="M4 10 2 3l7 4h6l7-4-2 7v6c-2 4-4 6-8 6s-6-2-8-6v-6Z"/><path d="m7 11 3 2-3 1m10-3-3 2 3 1m-7 4 2-2 2 2"/></svg><div><span>&#48372;&#49828; &#46321;&#44553;</span><strong id="bossMetric">1</strong></div></div>
     </div>
-  </div>
+  </section>
 
-  <div class="card">
-    <div class="tabs">
-      <button class="tab active" data-filter="all">전체 <span class="tab-count" id="countAll">0</span></button>
-      <button class="tab" data-filter="priority">중요도</button>
-      <button class="tab" data-filter="done">완료</button>
+  <main class="shell main-content" id="mainContent">
+    <div class="filters">
+      <label class="search-field"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="searchInput" type="search" placeholder="&#51060;&#47492; &#46608;&#45716; &#53440;&#51077;&#51004;&#47196; &#44160;&#49353;..." autocomplete="off"></label>
+      <select id="difficultyFilter" aria-label="difficulty"><option value="">&#51204;&#52404; &#45212;&#51060;&#46020;</option><option value="easy">&#49772;&#50880;</option><option value="normal">&#48372;&#53685;</option><option value="hard">&#50612;&#47140;&#50880;</option><option value="boss">&#48372;&#49828;</option></select>
+      <select id="typeFilter" aria-label="type"><option value="">&#51204;&#52404; &#53440;&#51077;</option></select>
+      <select id="sortOrder" aria-label="sort"><option value="name-asc">&#51060;&#47492;&#49692; (&#44032;&#45208;&#45796;/ABC/123)</option><option value="name-desc">&#51060;&#47492; &#50669;&#49692;</option><option value="type-asc">&#53440;&#51077;&#49692;</option><option value="difficulty-asc">&#45212;&#51060;&#46020;&#49692; (&#49772;&#50880;&#8594;&#48372;&#49828;)</option><option value="created-desc">&#52572;&#44540; &#49373;&#49457;&#49692;</option></select>
+      <button class="add-button entity-add-button" id="addButton" type="button"><span>+</span>&#50644;&#54000;&#54000; &#52628;&#44032;</button>
     </div>
 
-    <div class="list" id="list"></div>
+    <div class="column-grid table-heading" aria-hidden="true"><span>&#51060;&#47492; / &#53440;&#51077;</span><span>&#45212;&#51060;&#46020;</span><span>&#52404;&#47141;</span><span>&#49549;&#46020;</span><span>&#44277;&#44201;&#47141;</span><span>&#49828;&#54256;&#50984;</span><span>&#49373;&#49457; / &#49688;&#51221;&#51068;</span><span>&#44288;&#47532;</span></div>
+    <div id="monsterList" class="monster-list" aria-live="polite"></div>
+  </main>
 
-    <div class="add-section">
-      <button class="add-btn" id="showAddForm">
-        <span class="add-icon"></span>
-        새 항목 추가
-      </button>
-      <form class="add-form" id="addForm">
-        <div class="form-row">
-          <input type="text" id="newTitle" placeholder="할 일을 입력하세요" />
-        </div>
-        <div class="form-row">
-          <input type="text" id="newCategory" placeholder="카테고리" style="max-width:120px" />
-          <select id="newPriority">
-            <option value="low">낮음</option>
-            <option value="medium" selected>중간</option>
-            <option value="high">높음</option>
-          </select>
-        </div>
-        <div class="form-row time-row">
-          <label>시작 <input type="time" id="newStart" /></label>
-          <label>종료 <input type="time" id="newEnd" /></label>
-        </div>
-        <div class="form-buttons">
-          <button type="submit" class="primary">추가</button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <section class="trash-page" id="trashPage">
+    <div class="trash-summary"><div class="shell trash-summary-inner"><div class="trash-count-icon">&#128465;</div><div><span>&#49325;&#51228;&#46108; &#50644;&#54000;&#54000;</span><strong id="deletedCount">0</strong></div><p>&#49325;&#51228;&#46108; &#47788;&#49828;&#53552;&#47484; &#48373;&#50896;&#54616;&#44144;&#45208; &#50689;&#44396;&#51201;&#51004;&#47196; &#51228;&#44144;&#54624; &#49688; &#51080;&#49845;&#45768;&#45796;. &#48373;&#50896; &#49884; &#50896;&#47000; &#47785;&#47197;&#51004;&#47196; &#46028;&#50500;&#44049;&#45768;&#45796;.</p></div></div>
+    <main class="shell main-content"><div class="trash-filters"><label class="search-field"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="trashSearch" placeholder="&#51060;&#47492; &#46608;&#45716; &#53440;&#51077;&#51004;&#47196; &#44160;&#49353;..."></label><select id="trashDifficulty"><option value="">&#51204;&#52404; &#45212;&#51060;&#46020;</option><option value="easy">&#49772;&#50880;</option><option value="normal">&#48372;&#53685;</option><option value="hard">&#50612;&#47140;&#50880;</option><option value="boss">&#48372;&#49828;</option></select><select id="trashType"><option value="">&#51204;&#52404; &#53440;&#51077;</option></select></div><div class="column-grid trash-table-heading"><span>&#51060;&#47492; / &#53440;&#51077;</span><span>&#45212;&#51060;&#46020;</span><span>&#52404;&#47141;</span><span>&#49549;&#46020;</span><span>&#44277;&#44201;&#47141;</span><span>&#49828;&#54256;&#50984;</span><span>&#49325;&#51228;&#51068; / &#49373;&#49457;&#51068;</span><span>&#44288;&#47532;</span></div><div id="trashPageList" class="monster-list"></div></main>
+  </section>
 
-  <p class="footer-note">머릿속을 비워야 새로운 것이 들어온다 · 나의 브레인 덤프</p>
-</div>
-
-<script src="config.js"></script>
-<script src="script.js"></script>
+  <dialog id="monsterDialog" class="panel-dialog create-dialog"><form id="monsterForm">
+    <div class="dialog-header"><h2>&#49352; &#47788;&#49828;&#53552; &#52628;&#44032;</h2><button id="dialogClose" type="button" aria-label="close">&times;</button></div>
+    <div class="dialog-body">
+      <label class="field full"><span>&#47788;&#49828;&#53552; &#51060;&#47492;</span><input name="name" placeholder="&#50696;: Frost Wraith" required></label>
+      <div class="capture-grid">
+        <label class="field"><span>&#53440;&#51077;</span><select name="type" id="monsterType"><option>&#50616;&#45936;&#46300;</option><option>&#50556;&#49688;</option><option>&#44396;&#51312;&#47932;</option><option>&#50501;&#47560;</option><option>&#51064;&#44036;&#54805;</option><option value="custom">&#44592;&#53440; (&#51649;&#51217; &#51077;&#47141;)</option></select></label><label class="field"><span>&#45212;&#51060;&#46020;</span><select name="difficulty"><option value="easy">&#49772;&#50880;</option><option value="normal" selected>&#48372;&#53685;</option><option value="hard">&#50612;&#47140;&#50880;</option><option value="boss">&#48372;&#49828;</option></select></label>
+        <label class="field custom-type-field" id="customTypeField"><span>&#49352; &#53440;&#51077; &#51060;&#47492;</span><input name="customType" id="customTypeInput" placeholder="&#50696;: &#51221;&#47161;, &#44592;&#44228;, &#50808;&#44228;&#51333;" maxlength="30"></label>
+        <label class="field"><span>&#52404;&#47141;</span><input name="hp" type="number" min="1" value="100" required></label><label class="field"><span>&#44277;&#44201;&#47141;</span><input name="attack" type="number" min="0" value="30" required></label><label class="field"><span>&#48169;&#50612;&#47141;</span><input name="defense" type="number" min="0" value="10" required></label><label class="field"><span>&#44221;&#54744;&#52824; &#48372;&#49345;</span><input name="xp" type="number" min="0" value="80" required></label><label class="field"><span>&#51060;&#46041; &#49549;&#46020; (m/s)</span><input name="speed" type="number" min="0" step="0.1" value="2" required></label><label class="field"><span>&#49828;&#54256;&#50984; (0&ndash;1)</span><input name="spawn" type="number" min="0" max="1" step="0.01" value="0.5" required></label>
+      </div><label class="field full"><span>&#44592;&#54925; &#45432;&#53944;</span><textarea name="notes" placeholder="&#54665;&#46041; &#54056;&#53556;, &#50557;&#51216;, &#49828;&#54256; &#51312;&#44148; &#46321;&#51012; &#51077;&#47141;&#54616;&#49464;&#50836;..."></textarea></label>
+    </div><div class="dialog-actions"><button class="cancel-link" id="dialogCancel" type="button">&#52712;&#49548;</button><button class="save-button" type="submit"><span>&#10003;</span>&#51200;&#51109;</button></div>
+  </form></dialog>
+  <dialog id="trashDialog" class="panel-dialog trash-dialog"><div class="dialog-header"><div><h2>&#55092;&#51648;&#53685;</h2><p>&#49325;&#51228;&#54620; &#47788;&#49828;&#53552;&#47484; &#48373;&#50896;&#54616;&#44144;&#45208; &#50689;&#44396; &#49325;&#51228;&#54624; &#49688; &#51080;&#49845;&#45768;&#45796;.</p></div><button id="trashClose" type="button" aria-label="close">&times;</button></div><div id="trashList" class="trash-list"></div><div class="dialog-actions"><button class="danger-link" id="emptyTrash" type="button">&#55092;&#51648;&#53685; &#48708;&#50864;&#44592;</button><button class="secondary-button" id="trashDone" type="button">&#45803;&#44592;</button></div></dialog>
+  <aside id="entityTooltip" class="entity-tooltip" role="dialog" aria-modal="false"></aside>
+  <dialog id="myBalanceDialog" class="panel-dialog balance-dialog"><div class="dialog-header"><div><h2>&#45208;&#51032; Balance</h2><p>&#54788;&#51116; &#44160;&#49353;, &#54596;&#53552;, &#51221;&#47148; &#49345;&#53468;&#47484; &#51200;&#51109;&#54616;&#49464;&#50836;.</p></div><button id="myBalanceClose" type="button" aria-label="close">&times;</button></div><div class="balance-save"><input id="balanceName" maxlength="30" placeholder="&#50696;: &#48372;&#49828; &#47788;&#49828;&#53552; &#54869;&#51064;"><button id="saveBalance" class="save-button" type="button">&#51200;&#51109;</button></div><div id="balanceList" class="balance-list"></div><div class="dialog-actions"><button id="myBalanceDone" class="secondary-button" type="button">&#45803;&#44592;</button></div></dialog>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
