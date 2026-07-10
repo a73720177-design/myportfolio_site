@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나의 브레인 덤프</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <div class="header-row">
+      <div>
+        <p class="eyebrow">Brain Dump</p>
+        <h1 class="title">나의 브레인 덤프</h1>
+        <p class="subtitle">머릿속 생각을 모두 꺼내 정리해보세요</p>
+      </div>
+      <div class="percent-block">
+        <div class="percent" id="percentValue">0<span class="percent-sign">%</span></div>
+        <div class="percent-label" id="percentLabel">0 / 0 완료</div>
+      </div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" data-filter="all">전체 <span class="tab-count" id="countAll">0</span></button>
+      <button class="tab" data-filter="priority">중요도</button>
+      <button class="tab" data-filter="done">완료</button>
+    </div>
+
+    <div class="list" id="list"></div>
+
+    <div class="add-section">
+      <button class="add-btn" id="showAddForm">
+        <span class="add-icon"></span>
+        새 항목 추가
+      </button>
+      <form class="add-form" id="addForm">
+        <div class="form-row">
+          <input type="text" id="newTitle" placeholder="할 일을 입력하세요" />
+        </div>
+        <div class="form-row">
+          <input type="text" id="newCategory" placeholder="카테고리" style="max-width:120px" />
+          <select id="newPriority">
+            <option value="low">낮음</option>
+            <option value="medium" selected>중간</option>
+            <option value="high">높음</option>
+          </select>
+        </div>
+        <div class="form-row time-row">
+          <label>시작 <input type="time" id="newStart" /></label>
+          <label>종료 <input type="time" id="newEnd" /></label>
+        </div>
+        <div class="form-buttons">
+          <button type="submit" class="primary">추가</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <p class="footer-note">머릿속을 비워야 새로운 것이 들어온다 · 나의 브레인 덤프</p>
+</div>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
